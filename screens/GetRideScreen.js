@@ -98,30 +98,9 @@ class GetRideScreen extends React.Component {
         longitude: LONGITUDE + SPACE,
       },
       userLocation: {},
-      inputLocation: ''
+      inputLocation: '',
+      fav: false
     };
-  fav = () => {
-    return (
-      <SvgUri
-        style={{ width: 32, height: 32 }}
-        uri={fill.heart}
-      />
-    );
-  };
-
-  handleChangeText = (value) => {
-    this.setState({ inputLocation: value})
-  }
-  
-  notFav = () => {
-    return (
-      <SvgUri
-        style={{ width: 24, height: 24 }}
-        uri={outline.heart}
-      />
-    );
-  };
-
   componentDidMount() {
     Geolocation.getCurrentPosition(
       position => {
@@ -134,6 +113,34 @@ class GetRideScreen extends React.Component {
       }
     )
   }
+
+  handleChangeText = (value) => {
+    this.setState({ inputLocation: value})
+  }
+
+  handleFavIconPress = () => {
+    this.state(prevState => ({
+      fav: !prevState.fav
+    }))
+  }
+  
+  notFav = () => {
+    return (
+      <SvgUri
+        style={{ width: 24, height: 24 }}
+        uri={outline.heart}
+      />
+    );
+  };
+  
+  fav = () => {
+    return (
+      <SvgUri
+        style={{ width: 32, height: 32, fill: '#57e6b7'}}
+        uri={fill.heart}
+      />
+    );
+  };
 
   render() {
     return (
@@ -164,9 +171,9 @@ class GetRideScreen extends React.Component {
           value={this.state.inputLocation}
           size="small"
           placeholder="Search location"
-          onChangeText={()=>this.handleChangeText}
-          onIconPress={()=>console.log("hello")}
-          icon={this.notFav}
+          onChangeText={this.handleChangeText}
+          onIconPress={this.handleFavIconPress}
+          icon={this.state.fav ? this.fav : this.notFav}
         />
         <Button onPress={() => this.props.navigation.navigate('PickUp')} style={styles.buttonImHere}>I'm Here</Button>
       </View>
@@ -201,7 +208,7 @@ const styles = StyleSheet.create({
     width: width / 1.2,
     borderRadius: 4,
     borderColor: 'transparent',
-    height: 45,
+    height: '15%',
     backgroundColor: '#fff',
   }
 })

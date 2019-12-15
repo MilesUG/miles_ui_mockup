@@ -141,20 +141,20 @@ class ConfirmScreen extends Component {
                 onChangeText={this.handleTextChange4}
                 keyboardType="number-pad"
               />
-            </View>
-            <View style={{position: 'relative', bottom: 134}}>
-              <Text
-                onPress={this.socialScreenOrPassword}
-                style={styles.socialLink}>
-                Resend code in:{' '}
-                <Text style={{color: '#000', fontWeight: 'bold'}}>00:59</Text>
-              </Text>
-              <Button
-                style={styles.buttonContinue}
-                size="medium"
-                icon={this.buttonIcon}
-                onPress={() => this.props.navigation.navigate('GetRide')}
-              />
+              <View style={{position: 'absolute', bottom: 132}}>
+                <Text
+                  onPress={this.socialScreenOrPassword}
+                  style={styless.socialLink}>
+                  Resend code in:{' '}
+                  <Text style={{color: '#000', fontWeight: 'bold'}}>00:59</Text>
+                </Text>
+                <Button
+                  style={[styles.buttonContinue, {'bottom': '19%'}]}
+                  size="medium"
+                  icon={this.buttonIcon}
+                  onPress={() => this.props.navigation.navigate('GetRide')}
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -178,23 +178,27 @@ const styless = StyleSheet.create({
   input: {
     borderColor: '#dddddd',
     backgroundColor: '#fff',
-    width: 70,
-    height: 45,
+    width: '22%',
+    height: "17.6%",
     fontSize: 12,
     textAlignVertical: 'center',
     position: 'relative',
   },
   secondInput: {
-    bottom: 45,
-    left: 84,
+    bottom: "17.5%",
+    left: "26%",
   },
   thirdInput: {
-    bottom: 90,
-    left: 168,
+    bottom: "35%",
+    left: "50%",
   },
   fourthInput: {
-    bottom: 135,
-    left: 253,
+    bottom: "52.5%",
+    left:" 75%",
+  },
+  socialLink: {
+    color: '#9c9da1',
+    fontSize: 16,
   },
 });
 

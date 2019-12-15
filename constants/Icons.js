@@ -6,7 +6,8 @@ const fill = {
     google: 'https://akveo.github.io/eva-icons/fill/svg/google.svg',
     heart: 'https://akveo.github.io/eva-icons/fill/svg/heart.svg',
     pin: 'https://akveo.github.io/eva-icons/fill/svg/pin.svg',
-    clock: 'https://akveo.github.io/eva-icons/fill/svg/clock.svg'
+    clock: 'https://akveo.github.io/eva-icons/fill/svg/clock.svg',
+    minus: 'https://akveo.github.io/eva-icons/fill/svg/minus-circle.svg',
 }
 
 const outline = {

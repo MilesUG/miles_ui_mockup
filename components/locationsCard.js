@@ -1,22 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Input, Button, Text, Layout } from 'react-native-ui-kitten';
+import { Input, Button, Text, Layout, Modal } from 'react-native-ui-kitten';
 import { SvgUri } from 'react-native-svg';
-import {withNavigation} from 'react-navigation'
+import { withNavigation } from 'react-navigation'
 import React, { Component } from 'react';
 import {
     View,
-    Image,
+    BackHandler,
     StyleSheet
 } from 'react-native';
-import { getWidth } from '../utils/getWidth';
+import { getWidth, getHeight } from '../utils/getWidth';
 import { fill, outline } from '../constants/Icons';
+import CardModal from './modalCard'
 
 
 class LocationsCard extends Component {
     state = {
         location: '',
         typing: false,
+        confirmDelete: false,
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.onHandleDeleteModal)
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove()
+    }
+
     cancelIcon = style => {
         return <SvgUri style={{ fill: '#c1c1c1' }} uri={fill.cancel} />;
     };
@@ -28,6 +39,9 @@ class LocationsCard extends Component {
     };
     deletePlace = style => {
         return <SvgUri style={{ fill: '#f86b7e', width: 24, height: 24 }} uri={outline.minus} />;
+    }
+    deletePlaceFill = style => {
+        return <SvgUri style={{ fill: '#f86b7e', width: 24, height: 24 }} uri={fill.minus} />;
     }
     handleChangeText = value => {
         this.setState({ location: value, typing: true })
@@ -41,6 +55,18 @@ class LocationsCard extends Component {
     buttonIcon = style => {
         return <SvgUri style={{ fill: '#fff' }} uri={fill.forward} />;
     };
+    onHandleDeleteModal = () => {
+        this.setState(prevState => ({
+            confirmDelete: !prevState.confirmDelete
+        }))
+    }
+
+    onHandleContinue = () => {
+        this.props.navigation.navigate('DropOff')
+        this.setState({
+            confirmDelete: false
+        })
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -59,13 +85,13 @@ class LocationsCard extends Component {
                         />
                         <View>
                             <Button
-                            style={[{left: 0, top: 15}, styles.deletePlace]}
-                            icon={this.pinIcon}
+                                style={[{ left: 0, top: 15 }, styles.deletePlace]}
+                                icon={this.pinIcon}
                             />
-                            <Text onPress={()=>this.props.navigation.navigate('GetRide')} style={{ marginTop: 25, marginLeft: 40,color: "#c1c1c1" }}>Tap to select from map</Text>
+                            <Text onPress={() => this.props.navigation.navigate('GetRide')} style={{ marginTop: 25, marginLeft: 40, color: "#c1c1c1" }}>Tap to select from map</Text>
                             <Button
                                 style={[{ marginTop: 0 }, styles.buttonContinue]}
-                                onPress={() => this.props.navigation.navigate('DropOff')}
+                                onPress={this.onHandleContinue}
                                 icon={this.buttonIcon}
                             />
                         </View>
@@ -73,37 +99,39 @@ class LocationsCard extends Component {
                 </View>
                 <View className="placesVisted">
                     <View style={styles.favoritePlaces}>
-                        <View style={styles.favTitle}><Text style={{fontWeight: 'bold'}} category='h6'>Favourite places</Text></View>
+                        <View style={styles.favTitle}><Text style={{ fontWeight: 'bold' }} category='h6'>Favourite places</Text></View>
                         <View>
                             <View>
                                 <Button
-                                style={[{top: -6,left: -12}, styles.deletePlace]}
-                                icon={this.heartIcon}
-                                 />
+                                    style={[{ top: -6, left: -12 }, styles.deletePlace]}
+                                    icon={this.heartIcon}
+                                />
                             </View>
-                            <View style={{marginLeft: 30}}>
-                                <Text style={{fontWeight: 'bold'}} category='s1'>Creative solutions-office</Text>
-                                <Text style={{fontWeight: 'bold', color: '#c1c1c1'}} category='c2'>No. 29 deal pl, colombo</Text>
+                            <View style={{ marginLeft: 30 }}>
+                                <Text style={{ fontWeight: 'bold' }} category='s1'>Creative solutions-office</Text>
+                                <Text style={{ fontWeight: 'bold', color: '#c1c1c1' }} category='c2'>No. 29 deal pl, colombo</Text>
                             </View>
                             <Button style={styles.deletePlace}
-                            icon={this.deletePlace}
+                                onPress={this.onHandleDeleteModal}
+                                icon={this.state.confirmDelete ? this.deletePlaceFill : this.deletePlace}
                             />
                         </View>
-                    <View style={{marginTop: 25}}>
-                        <View style={styles.favTitle}><Text style={{fontWeight: 'bold'}} category='h6'>Recently visited places</Text></View>
-                        <View>
-                        <View>
-                            <Button style={[{top: -6,left: -12}, styles.deletePlace]}
-                            icon={this.clockIcon}
-                            />
+                        <View style={{ marginTop: 25 }}>
+                            <View style={styles.favTitle}><Text style={{ fontWeight: 'bold' }} category='h6'>Recently visited places</Text></View>
+                            <View>
+                                <View>
+                                    <Button style={[{ top: -6, left: -12 }, styles.deletePlace]}
+                                        icon={this.clockIcon}
+                                    />
+                                </View>
+                                <View style={{ marginLeft: 30 }}>
+                                    <Text style={{ color: '#94959a', fontWeight: 'bold' }} category="s1">Naguru - block 25</Text>
+                                </View>
+                            </View>
                         </View>
-                        <View style={{marginLeft: 30}}>
-                            <Text style={{color:'#94959a', fontWeight: 'bold'}} category="s1">Naguru - block 25</Text>
-                        </View>
-                        </View>
-                    </View>
                     </View>
                 </View>
+                <CardModal hidden={this.state.confirmDelete} />
             </View>
         )
     }
@@ -118,11 +146,43 @@ export const styles = StyleSheet.create({
     input: {
         borderColor: '#dddddd',
         marginTop: 5,
-        height: 45,
+        height: '35%',
         backgroundColor: '#fff',
     },
     titleFont: {
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    modalText: {
         fontWeight: 'bold'
+    },
+    modalButtons: {
+        width: 155,
+        backgroundColor: '#ffffff',
+        borderColor: '#94959a',
+        borderRadius: 50,
+        marginTop: 10,
+    },
+    cardModal: {
+        borderColor: '#000',
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        backgroundColor: '#fff',
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 20,
+        paddingBottom: 20,
+        width: getWidth(100),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 16.00,
+        elevation: 24,
+        marginTop: getHeight(100) - 168
+
     },
     card: {
         borderColor: '#000',

@@ -51,7 +51,7 @@ class SociaLoginScreen extends Component {
                 Connect with Google
               </Button>
             </View>
-            <View>
+            <View style={{marginTop: '2%'}}>
               <Button style={styles.facebook} icon={this.facebook}>
                 Connect with Facebook
               </Button>

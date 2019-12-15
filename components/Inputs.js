@@ -97,7 +97,7 @@ class Inputs extends Component {
               {this.props.socialOrPassword}
             </Text>
             <Button
-              onPress={() =>
+              onPress={() => 
                 this.props.navigation.state.routeName === 'Password'
                   ? this.props.navigation.navigate('Confirm')
                   : this.props.navigation.navigate(this.props.screenName)
@@ -132,9 +132,10 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   input: {
+    position: 'relative',
     borderColor: '#dddddd',
     marginTop: 5,
-    height: 45,
+    height: "17.6%",
     backgroundColor: '#fff',
   },
   card: {
@@ -142,7 +143,7 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     backgroundColor: '#fff',
-    height: getWidth(100) - 50,
+    height: 400,
     paddingLeft: 15,
     paddingRight: 15,
     elevation: 10,
@@ -159,7 +160,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#373F51',
     position: 'relative',
     left: getWidth(100) - 75,
-    bottom: 30,
+    bottom: 35,
   },
   backButton: {
     backgroundColor: 'transparent',
